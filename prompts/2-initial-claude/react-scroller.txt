@@ -1,0 +1,8 @@
+Please read the attached model.js, index.html, style.css, and script.js. It's purpose is to:
+- Display as many column as will fit on the screen. As columns scroll off either the left or right of the screen, the column elements are removed from the DOM. There is a one column margin on both sides that is not removed. There is a spacer before the first column and another spacer after the last. The minWidth of these spacers are adjusted as elements are added and removed, so that the scroll bars behave as if all the column elements were always there.
+- Within each column, the tasks can be individually scrolled. Again, as many tasks as will fit are displayed, and as tasks scroll of either the top or bottom of the column, the task elements are removed. Again, there are spsacers for each column that are adjusted to make it look as if all taks are always present.
+- A filter can be applied such that everything is re-rendered so as to show only the taks that pass the filter.
+
+If there is something you do not understand, please ask.
+
+I would like a React Native version of web page. If possible, it should re-use the models.js file. The other files can be rewritten for React.
