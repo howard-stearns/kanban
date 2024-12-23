@@ -61,9 +61,11 @@ See Core Requirements of (Appendix: Original project Brief)[#appendix-original-p
 
 ### Exclusions
 
-(_This key section lists things that someone might reasonably expect from a project. They are often opportunities for follow on work, or sometimes, causes stakeholders to require changes to the project before a kickoff is approved._)
+(_This key section lists things that a stakeholder might reasonably expect from a project, but which is not covered in the Release milestones. They are often opportunities for follow on work, or sometimes, causes stakeholders to require changes to the project before a kickoff is approved._)
 
 **No Web** - Becaue the solution is built around FlatList, which is specific to React _Native_, it is not entriely simple to generalize this to either React or to other Web-specific frameworks (such as Svelte, Lit, etc.).
+
+**UX** - I work closely and interactively with UX or Interaction Designer professionals, but I myself am the last person you want designing the flow or look-and-feel of your interface. In this project, with new UX buddy, I'm just letting the defaults ride. In the past, I've been well-served by aassuming Material Design Web, or Material Design Lite for prototyping, but I don't want to presume that the company is on-board with this, and I also don't want to complicate my first foray into React _Native_ by presuming they play well together. (E.g., React for the Web has it's own derivative of Material Design that is not quite compatible.)
 
 ### Release
 
