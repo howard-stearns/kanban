@@ -77,8 +77,10 @@ export class Column extends Group {
 
 export class Board extends Group {
   applyFilter(filter) {
+    console.log('applyFilter', filter);
     for (const column of this.items) {
       column._filtered = column.items.filter(filter);
+      console.log('filtered:', column._filtered);
     }
   }
   static makeExample(nColumns, nTasksPerColumn) { // Populate the board.

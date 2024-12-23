@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform
 } from 'react-native';
+import TaskPropertyForm from './TaskPropertyForm';
 
 const TaskEditDialog = ({ visible, task, onCancel, onOk }) => {
   const [editedValues, setEditedValues] = useState({
@@ -19,7 +20,6 @@ const TaskEditDialog = ({ visible, task, onCancel, onOk }) => {
     categories: []
   });
 
-  // Reset edited values when dialog opens
   React.useEffect(() => {
     if (visible) {
       setEditedValues({
@@ -32,67 +32,6 @@ const TaskEditDialog = ({ visible, task, onCancel, onOk }) => {
     }
   }, [visible, task]);
 
-  const handleTextChange = (field, value) => {
-    setEditedValues(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleCategoryChange = (text) => {
-    // Split by commas and trim whitespace, but keep empty entries
-    const categories = text.split(',').map(cat => cat.trim());
-    setEditedValues(prev => ({
-      ...prev,
-      categories
-    }));
-  };
-
-  const handleDateChange = () => {
-    if (Platform.OS === 'web') {
-      // For web, use a simple date input
-      return;
-    }
-    // Platform specific date picker code here...
-  };
-
-  const renderDateInput = () => {
-    if (Platform.OS === 'web') {
-      return (
-        <input
-          type="date"
-          value={editedValues.due.toISOString().split('T')[0]}
-          onChange={(e) => handleTextChange('due', new Date(e.target.value))}
-          style={{
-            padding: 8,
-            fontSize: 14,
-            borderWidth: 1,
-            borderColor: '#ddd',
-            borderRadius: 4,
-            width: '100%'
-          }}
-        />
-      );
-    } else if (Platform.OS === 'ios') {
-      return (
-        <DatePickerIOS
-          date={editedValues.due}
-          onDateChange={(date) => handleTextChange('due', date)}
-          mode="date"
-        />
-      );
-    } else {
-      // Android
-      return (
-        <TouchableOpacity onPress={handleDateChange}>
-          <Text style={styles.dateText}>
-            {editedValues.due.toLocaleDateString()}
-          </Text>
-        </TouchableOpacity>
-      );
-    }
-  };
-
   return (
     <Modal
       visible={visible}
@@ -101,63 +40,27 @@ const TaskEditDialog = ({ visible, task, onCancel, onOk }) => {
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <ScrollView>
-            <View style={styles.field}>
-              <Text style={styles.label}>Name:</Text>
-              <TextInput
-                style={styles.input}
-                value={editedValues.name}
-                onChangeText={(text) => handleTextChange('name', text)}
-              />
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Description:</Text>
-              <TextInput
-                style={[styles.input, styles.multiline]}
-                value={editedValues.description}
-                onChangeText={(text) => handleTextChange('description', text)}
-                multiline
-                numberOfLines={3}
-              />
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Due Date:</Text>
-              {renderDateInput()}
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Assignee:</Text>
-              <TextInput
-                style={styles.input}
-                value={editedValues.assignee}
-                onChangeText={(text) => handleTextChange('assignee', text)}
-              />
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Categories (comma-separated):</Text>
-              <TextInput
-                style={styles.input}
-                value={editedValues.categories.join(', ')}
-                onChangeText={handleCategoryChange}
-              />
-            </View>
-          </ScrollView>
-
+          <TaskPropertyForm
+            values={editedValues}
+            onValueChange={(field, value) => {
+              setEditedValues(prev => ({
+                ...prev,
+                [field]: value
+              }));
+            }}
+          />
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={[styles.button, styles.cancelButton]} 
               onPress={onCancel}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.button, styles.okButton]} 
               onPress={() => onOk(editedValues)}
             >
-              <Text style={styles.okButtonText}>OK</Text>
+              <Text style={styles.buttonText}>OK</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -67,6 +67,8 @@ See Core Requirements of (Appendix: Original project Brief)[#appendix-original-p
 
 **UX** - I work closely and interactively with UX or Interaction Designer professionals, but I myself am the last person you want designing the flow or look-and-feel of your interface. In this project, with new UX buddy, I'm just letting the defaults ride. In the past, I've been well-served by aassuming Material Design Web, or Material Design Lite for prototyping, but I don't want to presume that the company is on-board with this, and I also don't want to complicate my first foray into React _Native_ by presuming they play well together. (E.g., React for the Web has it's own derivative of Material Design that is not quite compatible.)
 
+**Offline or Paged Model** - I prototyped a version of this with the entire set of Tasks _models_ in-memory, but of course only a bit more than the visible element _views_ getting instantiated. There is no problem with thousand or even tens of thousands of such model items. The FlatList component of React works the same way. It does not bring elements in one at a time, or even a page at a time.
+
 ### Release
 
 Due December 26.

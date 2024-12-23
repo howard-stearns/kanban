@@ -1,0 +1,17 @@
+Good. Now please add a filter for the data.
+
+Please create a pull-out sidebar for filtering:
+- The sidebar should have editable items for each of a Task's properties (except id).
+- The property fields in the filter sidebar should edit in the same way as editing a Task.
+  - For now, the "due" property should be labeled "due before" in the filter sidebar.
+  - Please factor out the the parts of the code that are reusable between the Task editor and filter, so that the code is not repeated.
+- The filter sidebar should have an "apply" button and a "dismiss" button.
+  - When the "dismiss" button is pressed, the sidebar should close.
+  - When the "apply" button is pressed, the Board model's applyFilter() should called with a filter predicate such as:
+     board.applyFilter(task =>
+       (!filterData.name || task.name.includes(filterData.name)) &&
+       (!filterData.description || task.description.includes(filterData.description)) &&
+       (!filterData.assignee || task.assignee.includes(filterData.assignee)) &&
+       (!filterData.categories.length || filterData.categories.every(required => task.categories.some(category => category.includes(required)))) &&
+       (task.due <= filterData.due))
+Note that after applying filter, each column (or the whole board) must be re-rendered.
