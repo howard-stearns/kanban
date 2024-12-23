@@ -2,11 +2,20 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 const Task = ({ task, config }) => {
-  React.useEffect(() => console.log('render task', task, config));
   return (
     <View style={[styles.task, { height: config.TASK_HEIGHT }]}>
-      <Text style={styles.taskLabel}>{task.label}</Text>
-      <Text style={styles.taskText} numberOfLines={2}>{task.text}</Text>
+      <Text style={styles.taskName}>{task.name}</Text>
+      <Text style={styles.taskDescription} numberOfLines={2}>{task.description}</Text>
+      {task.assignee ? (
+        <Text style={styles.taskAssignee}>Assigned to: {task.assignee}</Text>
+      ) : null}
+      {task.categories.length > 0 ? (
+        <View style={styles.categoriesContainer}>
+          {task.categories.map(category => (
+            <Text key={category} style={styles.category}>{category}</Text>
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -26,14 +35,34 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
   },
-  taskLabel: {
+  taskName: {
     fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 4,
   },
-  taskText: {
+  taskDescription: {
     fontSize: 12,
     color: '#666',
   },
+  taskAssignee: {
+    fontSize: 11,
+    color: '#888',
+    marginTop: 4,
+  },
+  categoriesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+  },
+  category: {
+    fontSize: 10,
+    backgroundColor: '#e0e0e0',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    marginRight: 4,
+    marginTop: 2,
+  },
 });
+
 export default Task;

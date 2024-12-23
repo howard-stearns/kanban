@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList } from 'react-native';
 import Task from './Task';
 
 const Column = ({ column, config, index }) => {
-  React.useEffect(() => console.log('render column', column, config, index));
   const renderTask = ({ item: task }) => (
     <Task 
       task={task}
@@ -14,7 +13,7 @@ const Column = ({ column, config, index }) => {
   return (
     <View style={[styles.column, { width: config.COLUMN_WIDTH }]}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>{column.label}</Text>
+        <Text style={styles.headerText}>{column.name}</Text>
       </View>
       <FlatList
         data={column.filtered}

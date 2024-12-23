@@ -1,0 +1,11 @@
+That's terrific. I did have to make some small changes to get it to run:
+
+- At the bottom of task.js, I had to add: export default Task;
+- I had to add a file, index.tsx, attached.
+
+Going forward, I have also:
+- I removed the makeObserverCallback method from the Group model, as it is not being used.
+- I changed the properties "label" and "text" to be "name" and "description".
+Attached is a new version models.js.
+
+Please make these changes to the React Native version that you have made.

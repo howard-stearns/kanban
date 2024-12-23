@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Board } from './models.js'; // Reusing the existing models
+import { StyleSheet, View } from 'react-native';
+import { Board } from './models.js';
 import KanbanBoard from './components/KanbanBoard';
 
 // Configuration parameters
 const CONFIG = {
   COLUMN_WIDTH: 300,
-  TASK_HEIGHT: 60,
-  COLUMN_MARGIN: 1, // Number of columns to keep rendered outside view
-  TASK_MARGIN: 1,   // Number of tasks to keep rendered outside view
+  TASK_HEIGHT: 120,
+  COLUMN_MARGIN: 1,
+  TASK_MARGIN: 1,
 };
 
 export default function App() {
