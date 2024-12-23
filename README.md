@@ -12,7 +12,7 @@ A project brief is presented (see [Appendix: Original Project Brief](#appendix-o
 
 It's hard for an employer to see _whether_ someone can technically do the work requried. Harder still to see _if_ they will do the work, and _how_ they will approach representative problems. Programming exercises, order-of-complexity tests, and math puzzles do not necessarilly capture this. 
 
-Meanwhile, Kanban boards are recognized by technical users. (See e.g., (Trello)[https://www.google.com/search?q=trello+kanban&rlz=1C5CHFA_enUS1129US1130&oq=trello+kanban&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORiABDIHCAEQABiABDIICAIQABgWGB4yCAgDEAAYFhgeMggIBBAAGBYYHjIICAUQABgWGB4yCAgGEAAYFhgeMggIBxAAGBYYHjIICAgQABgWGB4yCAgJEAAYFhge0gEIMzEwMGowajeoAgiwAgE&sourceid=chrome&ie=UTF-8).)
+Meanwhile, Kanban boards are recognized by technical users. (See e.g., (Trello)[https://www.youtube.com/watch?v=xky48zyL9iA).)
 
 ### Opportunity
 
@@ -46,6 +46,7 @@ The provided brief calls out two items -- scale and the use of AI -- that can be
 2. So I concluded that I had to be more presecriptive in telling the AI how to proceed. I thought I must complete the key "infinite scroll" aspects myself and then tell the AI to simply rewrite it as a React Native app. At the same time, Anthropic came out with a new version of Claude that was intended to perform better for coding.
    - I used the W3C standard IntersectionObserver to implement infinite scrolling. I ran into technical difficulties with someone flicks a trackpad fast enough that Chrome keeps emmitting many scroll messages after the user has stopped, and spent _way too much time_ working around that_. But in any case, I now had a proper infinite scroll mechanism, captured in my model objects.
    - Having never used React _Native_ before, I had mistakenly assumed that it supported browser standards, as React would under the hood. (I assumed it was wrapping a Web View, or included Chromium like Electron.) As it turns out, React Native does not support IntersectionObserver at all! Fortunately, Claude understood what I was after, and did the right thing with React Native's built-in FlatList. (_This is a good example of why prototyping is so important before the project's kickoff._)
+   - Interestingly, it recognized that I was building a Kanban board. _The only place I had used that word was in the name of the unit tests suite for the models._.
    - The results needed some minor fixes to run at all, but basically did the right thing.
    
 The plan then, is to work with Claude to refine that result.
