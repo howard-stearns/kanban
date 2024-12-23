@@ -38,16 +38,14 @@ const FilterSidebar = ({ visible, onDismiss, onApplyFilter }) => {
 
   const handleApply = () => {
     console.log(filterValues, Task);
-    onApplyFilter(task => {
-      console.log(task);
-      return (!filterValues.name || task.name.includes(filterValues.name)) && 
+    onApplyFilter(task =>
+      (!filterValues.name || task.name.includes(filterValues.name)) && 
       (!filterValues.description || task.description.includes(filterValues.description)) && 
       (!filterValues.assignee || task.assignee.includes(filterValues.assignee)) && 
       (!filterValues.categories.length || filterValues.categories.every(
         required => task.categories.some(category => category.includes(required))
       )) && 
       (task.due === Task.endOfTheWorld || task.due <= filterValues.due)
-    }
     );
   };
 
