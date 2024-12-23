@@ -1,0 +1,14 @@
+Good. Now please make the Task card editable. When the user clicks on a Task card, the app should show a popup dialog showing each Task property (except "id"), even if the property value is empty or default. The user can then click on the input element for the value in order to edit that value.
+
+The dialog should have two buttons: 'ok', and 'cancel':
+- If the user clicks "cancel", the changes are not saved, and the normal display of the Task should show the old model values.
+- If the user clicks "ok", the changes are committed to the model, and the normal display of the Task should show the new values.
+
+---
+That's pretty good, but please fix the following problems:
+
+- The editedValues object can have properties whose values are undefined. This causes editedValues.due.toLocaleDateString() and editedValues.categories.join(', ') to fail. For now, I have worked around this by using Javascript's optional chaining operator and an '|| ""', as in: editedValues.categories?.join(', ') || ''
+- With these workarounds in place, when the dialog is opened, the browser console shows the following error: "warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://reactjs.org/link/controlled-components"
+- When testing with a Web browser (not Android or iOS), the data picker does not work. Clicking the Due Date for editing produces "Cannot open date picker Cannot read properties of undefined (reading 'open') in the browser console.
+- The editing dialog will not allow more than one category to be specified. This is because handleCategoryChange transforms the comma-separated list into an array using .split(',') and then filters out empty categories using .filter(cat => cat). This results in trailing comma always being ignored. Since handleCategoryChange is run with each text edit, entering a comma is always a trailing comma as it is typed. I think the quickest fix is to simply leave off the .filter(cat => cat).
+- The "cancel" button color choice makes it looks like the button is disabled.

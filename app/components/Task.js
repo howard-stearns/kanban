@@ -1,22 +1,49 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import TaskEditDialog from './TaskEditDialog';
 
 const Task = ({ task, config }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handlePress = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleOk = (updatedValues) => {
+    Object.assign(task, updatedValues);
+    setIsEditing(false);
+  };
+
   return (
-    <View style={[styles.task, { height: config.TASK_HEIGHT }]}>
-      <Text style={styles.taskName}>{task.name}</Text>
-      <Text style={styles.taskDescription} numberOfLines={2}>{task.description}</Text>
-      {task.assignee ? (
-        <Text style={styles.taskAssignee}>Assigned to: {task.assignee}</Text>
-      ) : null}
-      {task.categories.length > 0 ? (
-        <View style={styles.categoriesContainer}>
-          {task.categories.map(category => (
-            <Text key={category} style={styles.category}>{category}</Text>
-          ))}
+    <>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={[styles.task, { height: config.TASK_HEIGHT }]}>
+          <Text style={styles.taskName}>{task.name}</Text>
+          <Text style={styles.taskDescription} numberOfLines={2}>{task.description}</Text>
+          {task.assignee ? (
+            <Text style={styles.taskAssignee}>Assigned to: {task.assignee}</Text>
+          ) : null}
+          {task.categories.length > 0 ? (
+            <View style={styles.categoriesContainer}>
+              {task.categories.map(category => (
+                <Text key={category} style={styles.category}>{category}</Text>
+              ))}
+            </View>
+          ) : null}
         </View>
-      ) : null}
-    </View>
+      </TouchableOpacity>
+
+      <TaskEditDialog
+        visible={isEditing}
+        task={task}
+        onCancel={handleCancel}
+        onOk={handleOk}
+      />
+    </>
   );
 };
 
