@@ -2,7 +2,8 @@
 
 > Synopsis: A basic kanban board in React Native, as a "Take-home test" for employment.
 
-> Status: Did not get drag and drop working in the allotted time.
+> Status: Did not get drag and drop working in the allotted time. `npm install; npm run web`
+
 
 ## Concept
 
