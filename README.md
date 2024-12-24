@@ -2,7 +2,7 @@
 
 > Synopsis: A basic kanban board in React Native, as a "Take-home test" for employment.
 
-> Status: ??
+> Status: Did not get drag and drop working in the allotted time.
 
 ## Concept
 
@@ -40,16 +40,7 @@ For the high-level goal of employment, the chief risk to the business is in misi
 
 ### Vision
 
-The provided brief calls out two items -- scale and the use of AI -- that can be difficult. In particular, I was not confident of AI results, so I tried some things out as a sort of pre-project prototype (consistent with the way I like to approach projects):
-
-1. I tried an [Auftragstaktik](https://en.wikipedia.org/wiki/Mission-type_tactics) approach with ChatGPT, in which I described the result I wanted, and let it complete the task. (See [viewport.txt](../docs/viewport.)) In the prompt, I gave it a basic model and some jasmine unit tests to illustrate how the model worked. The results were garbage. I tried and failed to have the AI fix it with further instructions (see doc), which also failed. In particular, it completely failed to use any "infinite scroll" techniques, as is vital for the performance aspects of the project.
-2. So I concluded that I had to be more presecriptive in telling the AI how to proceed. I thought I must complete the key "infinite scroll" aspects myself and then tell the AI to simply rewrite it as a React Native app. At the same time, Anthropic came out with a new version of Claude that was intended to perform better for coding.
-   - I used the W3C standard IntersectionObserver to implement infinite scrolling. I ran into technical difficulties with someone flicks a trackpad fast enough that Chrome keeps emmitting many scroll messages after the user has stopped, and spent _way too much time_ working around that_. But in any case, I now had a proper infinite scroll mechanism, captured in my model objects.
-   - Having never used React _Native_ before, I had mistakenly assumed that it supported browser standards, as React would under the hood. (I assumed it was wrapping a Web View, or included Chromium like Electron.) As it turns out, React Native does not support IntersectionObserver at all! Fortunately, Claude understood what I was after, and did the right thing with React Native's built-in FlatList. (_This is a good example of why prototyping is so important before the project's kickoff._)
-   - Interestingly, it recognized that I was building a Kanban board. _The only place I had used that word was in the name of the unit tests suite for the models._.
-   - The results needed some minor fixes to run at all, but basically did the right thing.
-   
-The plan then, is to work with Claude to refine that result.
+The provided brief calls out two items -- scale and the use of AI -- that can be difficult. In particular, I was not confident of AI results, so I tried some things out as a sort of pre-project prototype (consistent with the way I like to approach projects). My belated conclusion (see [Technical Description](#technical-description), below), is to write a non-React straight HTML/Javascript/CSS app with infinite scroll, and have the AI do the heavey liftintg to React Native. If nothing else, I'll learn something.
 
 ### Minimum Viable Product
 
@@ -81,7 +72,34 @@ Can Claude take the result from prototyping and incrementally add the additional
 
 > What, exactly, is to be done? Who will do it? How long will it take? Define some internal milestones - specific observeable deliverables such as PRs or tests - that define sync points between multiple people's parts of the project, and which allow you to gauge if you're on track for schedule, and on track for demonstrating that the vision will work. By allowing for early detection of issues or even failure, you make it acceptable to take greater risks and have more ambitious goals.
 
-_In this case, I haven't done enough prep work to sketch this out._
+_Much of that doesn't apply here..._
+
+So, what I actually did, prior to "kickoff" of this one day project was:
+
+1. I tried an [Auftragstaktik](https://en.wikipedia.org/wiki/Mission-type_tactics) approach with ChatGPT, in which I described the result I wanted, and let it complete the task. (See [viewport.txt](../docs/viewport.)) In the prompt, I gave it a basic model and some jasmine unit tests to illustrate how the model worked. The results were garbage. I tried and failed to have the AI fix it with further instructions (see [prompts/1-viewport/prompt.txt](prompts/1-viewport/prompt.txt)), which also failed. In particular, it completely failed to use any "infinite scroll" techniques, as is vital for the performance aspects of the project.
+2. So I concluded that I had to be more presecriptive in telling the AI how to proceed. I thought I must complete the key "infinite scroll" aspects myself and then tell the AI to simply rewrite it as a React Native app. At the same time, Anthropic came out with a new version of Claude that was intended to perform better for coding:
+   - I used the W3C standard IntersectionObserver to implement infinite scrolling. I ran into technical difficulties with someone flicks a trackpad fast enough that Chrome keeps emmitting many scroll messages after the user has stopped, and spent _way too much time_ working around that_. But in any case, I now had a proper infinite scroll mechanism, captured in my model objects.
+   - Having never used React _Native_ before, I had mistakenly assumed that it supported browser standards, as React would under the hood. (I assumed it was wrapping a Web View, or included Chromium like Electron does.) As it turns out, React Native does not support IntersectionObserver at all! Fortunately, Claude understood what I was after, and did the right thing with React Native's built-in FlatList. (_This is a good example of why prototyping is so important before the project's kickoff._)
+   - Interestingly, it recognized that I was building a Kanban board. _The only place I had used that word was in the name of the unit tests suite for the models._.
+   - The results needed some minor fixes to run at all, but basically did the right thing.
+   
+Then for the actual one-day project:
+
+- This writeup, and get the first Claude version running: ~1.5 hours
+  - [prompts/2-initial-claude/prompt.txt](prompts/2-initial-claude/prompt.txt)
+- Task details - Support in models, with unit tests, prompt Claude and fix results: ~3 hours
+  - [prompts/3-details/prompt.txt](prompts/3-details/prompt.txt)
+- Editable tasks - Prompt Claude and fix results: ~1 hour
+  - [prompts/4-editable/prompt.txt](prompts/4-editable/prompt.txt)
+- Filtering - Revise models, prompt Claude and fix results: ~2 hours
+  - [prompts/5-filter/prompt.txt](prompts/5-filter/prompt.txt)
+- Fail at drag and drop: ~4 hours
+  - See [prompts/6-reordering/prompt.txt](prompts/6-reordering/prompt.txt) for more info.
+  
+Some post-mortem takeaways:
+
+- Claude.ai is not too bad. But you have to take things in small, incremental and reversable steps, and tell it quite presecriptively. Start with an already working example. It's better for automating the work of things you already know how to do, rather than doing things for you that you do not know.
+- Always qualify the tools and packages ahead of time through prototyping. Don't rely on the AI to tell you what's best.
 
 
 ## Apendix: Original Project Brief

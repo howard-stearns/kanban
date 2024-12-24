@@ -1,0 +1,101 @@
+Good. Now please add drag-and-drop handlers:
+
+A column should be able to be dragged over other columns. When dropped, if the horizontal midpoint of the dragged element is on the left half of the column it is dropped on, the dragged element should go just BEFORE the column it is dropped on. If the horizontal midpoint of the dragged element is on the right half of the column it is dropped on, then the dragged element should go just AFTER the column it is dropped on. During the drag itself, a heavy vertical bar should appear on the left or right of the column being dragged over, to indicate where the column will go.
+
+A task should be able to be dragged over other tasks in a column. When dropped, if the vertical midpoint of the dragged element is on the top half of the task it is dropped on, the dragged item element should go just befofore the item it is dropped on. Similarly, the dragged element should go after the element it is dropped on when it falls on the bottom half of a task element. As for drag-and-drop of columns, dragging a task should display a heavy horizontal bar when over a column, to indicate where the item will appear in the column.
+
+Note that a task can be dropped on an another task of the same column or a different column than the one it started in. Also note that a task can be dropped on an empty column. (The column may be empty because it has no items in it all, or because it has items that have been filtered.) 
+
+
+I have changed the definition of the addItem method of Group. It now reads:
+
+  addItem(item, {
+    beforeItem = null,
+    afterItem = null,
+    index = (beforeItem ? this.items.indexOf(beforeItem) :
+	     (afterItem ? (this.items.indexOf(afterItem) + 1) : undefined))
+  } = {}) {
+    // Add an item at the specified (floor of) index among the unfiltered items,
+    // before the specified beforeItem, after the specified afterItem,
+    // or at the end.
+    this.assertItem(item);
+    if (index !== undefined) {
+      this.assertPresent(index, item);
+      this.items.splice(Math.floor(index), 0, item);
+    } else {
+      this.items.push(item);
+    }
+  }
+
+Notice that:
+- If a task is dropped on an empty column, then instead of using the beforeItem or afterItem parameter of addItem, the caller should leave off BOTH parameters, and the task will safely be added to the end of the column.
+- Otherwise, the caller should specify a model (not a DOM Element or React Component) as the beofreItem or afterItem parameter. There is no need for the caller to identify an index number. This mechanism works for filtered Groups.
+- The caller must use the Group removeItem() method to remove the model item from its old group when dropped. The removeItem() method also takes an itemmodel as a parameter.
+- After calling removeItem() and addItem(), the app must re-render as it does for a change of filter.
+
+Please ask about anything you do not understand.
+
+---
+Good questions.
+
+1. For the visual indicators of drop target, I would like the heavy bar to be on the side of the actual drop target, rather than between items. This will help convey what the "hot spot" is for dropping. If there is no valid drop target, then there should be no heavy bar
+2. Yes, please do accept an entire column as a valid drap target for a task. This works both in the case where one is adding a task to an empty column, and where one is adding it to the end of a column that has empty space after the last visible member. (Regarding minimum drag distance, see next.)
+3. I would hope that React Native supplies a drag-and-drop mechanism that closely matches the user-interface bheavior of the drag-and-drop mechanisms for browsers. Specifically, in browsers, including mobile browsers, there is a distinct gesture that starts the drag (it may involve minimum distances to distinguish from a "click" or "touch"), and a translucent copy of the object during the drag. The item itself is not actually removed from its Group until there is a valid drop, and the place where it is from does not "close ranks" during the drag.  When over a valid drop target, I would like some sort of subtle highlighting of the drop target's borders (in addition to the heavy positioning bar). Please use whatever built-in or third-party drag-and-drop handler that is appropriate for this browser-like behavior.
+4. There is no need to change the filter after dropping. I'm not sure that I understandand your question, "Should we prevent dragging of filtered-out items, or should they remain draggable if visible?" How would a user drag an item that is not visible?
+
+There is one additional thing that I failed to mention:
+
+- At the moment that an item is dropped, the stand-in for the dragged object (e.g., the translucent copy in the case of a browser's drag) will typically be near the position that the item will be displayed in, but not exactly at that precise position. At the moment of a drop onto a valid drop target, I would like the real visual element to instantly replace the stand-in dragging copy at the dragging copy's current position (i.e., at the position that the user dropped it), and then smoothly animate to its final position over a period of about a half second. If the user stops dragging when NOT over a valid target, the display should animate back to its original position.
+
+---
+
+These are some of the changes I made to the results in order to try to get things to "compile".
+
+```
+DraggableBoard.js:
+  import React from 'react';
+  import { View, StyleSheet } from 'react-native';
+  import { DndProvider } from 'react-native-dnd';
+  import { DraggableColumn } from './DraggableColumn';
+  import { styles } from '../dragUtils';
+  add config to parameters of DraggableTask
+
+DraggableColumn.js:
+  import React, { useRef } from 'react';
+  import { useDrag, useDrop } from 'react-native-dnd';
+  import { View, StyleSheet, Animated } from 'react-native';
+  import Column from './Column';
+  import { getDropSide, styles, handleTaskDrop, handleColumnDrop } from '../dragUtils';
+  export default DraggableColumn;
+
+DraggableTask.js:
+  import React, { useRef } from 'react';
+  import { useDrag, useDrop } from 'react-native-dnd';
+  import { View, StyleSheet, Animated } from 'react-native';
+  import Task from './Task';
+  import { getDropSide, styles, handleTaskDrop } from '../dragUtils';
+  export default DraggableTask;;
+
+dragUtils.js:
+  import { StyleSheet } from 'react-native';
+  import { Board } from './models.js';
+
+  export each top level const.
+
+DndBoard.js:
+  import { View, StyleSheet, Animated } from 'react-native';
+  import { styles, handleTaskDrop, handleColumnDrop } from '../dragUtils';
+
+AnimatedDragLayer.js:
+  export default AnimatedDragLayer;
+
+app.js:
+  added CONFIG back
+  added useCallback to imports from react
+  added Button to imports from react-native, and used it instead of FilterButton
+```
+
+When I got to the point of patching react-native-dnd along the lines of [this](https://github.com/meliorence/react-native-snap-carousel/issues/1017#issuecomment-2114761463), it finally occured to me that maybe a package that hadn't been updated in 8 years might not be the best choice. I tried the more recent @mgcrea/react-native-dn, but it is not a compatible replacement.
+
+I think my next step would be to do some research on what react-native drage-an-drop libraries are worth using. However, I'm out of time.
+
